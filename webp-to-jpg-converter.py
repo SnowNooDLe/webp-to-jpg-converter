@@ -1,4 +1,6 @@
 import os
+from PIL import Image
+
 
 
 class WebpToJpgConverter():
@@ -17,18 +19,26 @@ class WebpToJpgConverter():
                 if '.webp' in file:
                     self.files.append(os.path.join(r, file))
 
-    def printWebps(self):
-        for f in self.files:
-            print(f)
+        if len(self.files) == 0:
+            return False
+
+        return True
 
     def convertFiles(self):
-        
+        for filename in self.files:
+            print('found: ' + os.path.splitext(filename)[0])
+            print('converting to: ' + os.path.splitext(filename)[0] + '.jpg')
+            im = Image.open(filename).convert("RGB")
+            im.save(os.path.splitext(filename)[0] + '.jpg', "jpeg")
+            print('done converting…')
+
 
 def main():
     tester = WebpToJpgConverter()
     tester.getPath()
-    tester.findWebps()
-    tester.printWebps()
+    # if webp files are found, do converting otherwise nothing
+    if tester.findWebps():
+        tester.convertFiles()
 
 if __name__ == '__main__':
     main()
